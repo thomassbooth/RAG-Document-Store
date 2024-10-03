@@ -13,16 +13,20 @@ services:
     expose:
       - "6333"  # Expose Qdrant on port 6333
       
-  # client:
-  #   container_name: rag-system-fe
-  #   build:
-  #     context: ./rag-system-fe
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 3000:3000
-  #   environment:
-  #     BACKEND_URL: localhost:8000
+  client:
+    container_name: client
+    volumes:
+      - .:/client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      BACKEND_URL: localhost:8000
+      LOCAL_URL: localhost:3000
+
   server:
     container_name: server
     volumes:
@@ -39,7 +43,6 @@ services:
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       QDRANT_CLIENT: http://qdrant:6333
-      GUARDRAILS_API_KEY: 
     
 
 # volume to persist data

@@ -1,5 +1,7 @@
 // components/FileUpload.js
 import { useState } from "react";
+import { Button } from "./ui/button";
+import { upload_file } from "@/actions/postUploadFile";
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
@@ -20,10 +22,8 @@ const FileUpload = () => {
     formData.append("file", file); // append the selected file to the formData
 
     try {
-      const res = await fetch("http://localhost:8000/upload", { // replace with your FastAPI URL
-        method: "POST",
-        body: formData,
-      });
+      
+      const res = await upload_file(formData)
 
       if (res.ok) {
         setStatus("File uploaded successfully!");
@@ -40,7 +40,7 @@ const FileUpload = () => {
     <div>
       <h1>Upload a File</h1>
       <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+      <Button onClick={handleUpload}>Upload</Button>
       {status && <p>{status}</p>}
     </div>
   );

@@ -38,7 +38,7 @@
     - Easily scalable
 
 5. Document Retrival system
-- Utilizing a multiquery system to generate different queries to make sure the documents we fetch are valid and dont contain bad words
+- Utilizing a multiquery system to generate different queries to get an array of documents, getting a better set of results.
 - 
 
 

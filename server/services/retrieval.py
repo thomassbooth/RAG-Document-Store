@@ -18,7 +18,7 @@ from langchain import hub
 
 
 class DocumentFormatter:
-
+    """Join together all documents retrieved from the vector store and extract their metadata to use in the query prompt"""
     @staticmethod
     def _format_docs(docs):
         """Format retrieved documents into a single string, including metadata"""
@@ -57,7 +57,7 @@ class QueryProcessor:
         Question: {question}
 
         Response:
-        If the documents provided aren't enough to...
+        If the documents provided aren't enough to answer the question, please return "I don't have enough information to answer this question."
         """)
 
     async def process_query(self, query: str):
@@ -71,7 +71,7 @@ class QueryProcessor:
         # Use a multiquery retriever to generate multiple prompts, grab docs then combine the result
         retriever = MultiQueryRetriever.from_llm(retriever=vectorstore.as_retriever(
             search_type="similarity", search_kwargs={"k": 10}), llm=self._llm)
-        
+
         prompt = hub.pull("rlm/rag-prompt")
         print(prompt)
         # Create the RAG chain, this essentially pipes each part as its computed as it goes through the chain
@@ -86,5 +86,5 @@ class QueryProcessor:
         )
 
         # Stream the results as they come in, this function is invoked as a Streaming result so use yield to return the results as they come in
-        async for chunk in rag_chain.astream({"question": "What do governmental agencies contribute?"}):
+        async for chunk in rag_chain.astream({"question": query}):
             yield chunk

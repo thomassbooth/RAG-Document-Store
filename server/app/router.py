@@ -1,22 +1,30 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
-from .embeddings import DocumentProcessor, DocumentEmbedder
+import io
+from fastapi import APIRouter, UploadFile, File, HTTPException, Body
+from services.embeddings import DocumentProcessor, DocumentEmbedder
 from fastapi.responses import StreamingResponse
 from concurrent.futures import ThreadPoolExecutor
-from .storage import VectorStore
-from .retrieval import QueryProcessor
+from services.storage import VectorStore
+from services.retrieval import QueryProcessor
+import json
 
 # Create a thread pool for background tasks
 executor = ThreadPoolExecutor(max_workers=5)
-import io
 
 router = APIRouter()
-@router.get("/")
-async def test():
+
+
+@router.post("/query")
+async def test(body: str = Body(...)):
+    data = json.loads(body)
+    if 'query' not in data:
+        raise HTTPException(
+            status_code=400, detail="Query parameter is required.")
+
     embedder = DocumentEmbedder()
     storage = VectorStore()
-    processor = QueryProcessor(embedding_service=embedder, vector_store=storage)
-    return StreamingResponse(processor.process_query("Hello"), media_type='text/event-stream')
-
+    processor = QueryProcessor(
+        embedding_service=embedder, vector_store=storage)
+    return StreamingResponse(processor.process_query(data['query']), media_type='text/event-stream')
 
 
 # Function to process file and call webhook
@@ -25,6 +33,7 @@ def process_file_and_notify(contents: bytes, file_name: str):
     storage = VectorStore()
     processor = DocumentProcessor(embedder, storage)
     documentChunks = processor.document_augmentation(contents, file_name)
+
 
 @router.post("/upload")
 async def upload_and_process_file(file: UploadFile = File(...)):
@@ -39,4 +48,5 @@ async def upload_and_process_file(file: UploadFile = File(...)):
         return {"File has been processed"}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error processing file: {str(e)}")
