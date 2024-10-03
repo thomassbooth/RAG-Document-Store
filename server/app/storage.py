@@ -26,3 +26,7 @@ class VectorStore:
             else:
                 print("An unexpected error occurred.")
         return
+    
+    def get_vectorstore(self, embedding_model: OpenAIEmbeddings):
+        return Qdrant(
+            client=self._client, collection_name="test", embeddings=embedding_model)

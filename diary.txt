@@ -5,7 +5,16 @@
 - Ensuring relavent answers
 - Dont over engineer since i have 2 days to complete
 
-2. Questions about trade offs regarding embedding generation when augmenting the document.
+2. Sending a file to the sever.
+- Proposed solution: The file can be infinitely large storing this IN memory to , to solve this we can stream the file from the browser to server.
+- Tradeoffs and benefits:
+    - We have no way of knowing where we are in the data, this means we cant store documents with associated metadata.
+    - We could wait for a certain number of size of bytes for each chunk but there is still no way of knowing.
+    - I need to fully load the file before knowing where each page is.
+
+- Solution: Simple rest endpoint where the file is uploaded in one chunk. - Non optimal
+
+3. Questions about trade offs regarding embedding generation when augmenting the document.
 - Since we are processing the data page by page for the metadata it makes sense to embed the data there and then after processing each page right?
 - Tradeoffs and Benefits that arise from this solution: 
     - since we are making a ton of calls to chatgpts api we can expect latency to occur adding to our overall time this happens in.
@@ -16,7 +25,7 @@
 - Production solution: we need a seperate microservice to perform this implemting a queue or a message broker system.
 - My solution: user uploads document to the endpoint: we push it to another thread to not block, process the document here generating and storing the embeddings page by page.
 
-3. Storing the data in a way we know where it came from, what paragraph etc.
+4. Storing the data in a way we know where it came from, what paragraph etc.
 - Two ideas: we store each pdf in a seperate collections store in the database
 - we store all vectors in the same collection with metadata
 - Tradeoffs and Benefits:
@@ -28,5 +37,10 @@
     - If we are searching a pdf at a time this is perfect
     - Easily scalable
 
-3. Document Retrival system
+5. Document Retrival system
+- Utilizing a multiquery system to generate different queries to make sure the documents we fetch are valid and dont contain bad words
 - 
+
+
+6. Implementing GuardRailsAI
+- Integra

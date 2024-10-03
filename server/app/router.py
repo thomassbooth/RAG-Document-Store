@@ -1,9 +1,9 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-import pdfplumber
 from .embeddings import DocumentProcessor, DocumentEmbedder
-import fitz
+from fastapi.responses import StreamingResponse
 from concurrent.futures import ThreadPoolExecutor
 from .storage import VectorStore
+from .retrieval import QueryProcessor
 
 # Create a thread pool for background tasks
 executor = ThreadPoolExecutor(max_workers=5)
@@ -12,8 +12,10 @@ import io
 router = APIRouter()
 @router.get("/")
 async def test():
-    
-    return {"message": "Hello World!"}
+    embedder = DocumentEmbedder()
+    storage = VectorStore()
+    processor = QueryProcessor(embedding_service=embedder, vector_store=storage)
+    return StreamingResponse(processor.process_query("Hello"), media_type='text/event-stream')
 
 
 
