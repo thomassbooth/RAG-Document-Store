@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333"  # Expose Qdrant on port 6333
+    environment:
+      QDRANT_LOG_LEVEL: "info"  # Optional: Set log level (debug, info, warn, error)
+    volumes:
+      - qdrant_data:/qdrant/storage  # Persist data
+    expose:
+      - "6333"  # Expose Qdrant on port 6333
+      
+  # client:
+  #   container_name: rag-system-fe
+  #   build:
+  #     context: ./rag-system-fe
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     BACKEND_URL: localhost:8000
+  server:
+    container_name: server
+    volumes:
+      - ./server:/app
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      - qdrant
+    ports:
+      - 8000:8000
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      QDRANT_CLIENT: http://qdrant:6333
+
+
+# volume to persist data
+volumes:
+  qdrant_data:

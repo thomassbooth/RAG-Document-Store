@@ -1,0 +1,32 @@
+1. Outline: Time management, focusing on the core components of the app which were: 
+- Augmenting the document, storing the chunks in a vector data with metadata about where their placement is in the document.
+- Setup a restapi that provides the following features: Querying the vector database, Uploading new documents to be parsed and stored in the database.
+- Containerizing the application
+- Ensuring relavent answers
+- Dont over engineer since i have 2 days to complete
+
+2. Questions about trade offs regarding embedding generation when augmenting the document.
+- Since we are processing the data page by page for the metadata it makes sense to embed the data there and then after processing each page right?
+- Tradeoffs and Benefits that arise from this solution: 
+    - since we are making a ton of calls to chatgpts api we can expect latency to occur adding to our overall time this happens in.
+    - We can also run into rate limiting issues doing it this way.
+    - It would be much faster to process the doc with the meta data first then make a single api call to chatgpt to generate the embeddings.
+    - Memory issues that can arise, say we have an infinitely long document we need to do this for then we end up running out of memory.
+        
+- Production solution: we need a seperate microservice to perform this implemting a queue or a message broker system.
+- My solution: user uploads document to the endpoint: we push it to another thread to not block, process the document here generating and storing the embeddings page by page.
+
+3. Storing the data in a way we know where it came from, what paragraph etc.
+- Two ideas: we store each pdf in a seperate collections store in the database
+- we store all vectors in the same collection with metadata
+- Tradeoffs and Benefits:
+    - One collection: Querying is quite simple since we deal with one collection and not many
+    - We are searching across multiple documents and this allows that in a simple way
+    - If we have a ton of documents then scaling issues may arise longer query times, indexing maybe more complex
+    - Multiple collections:
+    - Harder to query across multiple collections, could end up needing to do multiple queries which can be expensive and not actually gain us time
+    - If we are searching a pdf at a time this is perfect
+    - Easily scalable
+
+3. Document Retrival system
+- 
