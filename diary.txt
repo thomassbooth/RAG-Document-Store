@@ -39,8 +39,30 @@
 
 5. Document Retrival system
 - Utilizing a multiquery system to generate different queries to get an array of documents, getting a better set of results.
-- Creating a 
+- Creating a custom prompt to include where the documents provided to the llm came from.
+- Created a chain pipeline to call openais model to form a suitable response for our query.
+
+Issues:
+    - 
 
 
 6. Implementing GuardRailsAI
-- Integra
+- Integrating into docker setting up validators with apikeys and hub integration
+- Integrated the Toxic language filter
+- Due to the issues incorperating the query and response checker my alternative was updating the prompt to check teh documents to see if they were good enough to form a response.
+
+Issues:
+    - Never used this before.
+    - Integrating a guardrails to validate my response by calling an external LLM, due to myself using langchain.
+    - Potentially using Langchain wasnt the correct solution if wanting to implement guardrails, i couldnt manage to integrate the query checkers, the to_runable didnt have a way to provide meta_data, the with_metadata function didnt exist.
+    - To keep streaming a response possible i tried using to_runable, this doesnt let us stream the result it returns it in a chunk.
+
+7. Frontend Setup
+- Simple nextjs Setup
+- Route for uploading a new file which is /upload and the default / route lets us make queries.
+- Chat like looking chat gpt.
+
+Issues:
+    - Some small issues using env values and a docker container
+    Solution: Creating an env file yourself before building the project
+

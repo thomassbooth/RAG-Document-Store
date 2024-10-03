@@ -12,29 +12,42 @@ interface ChatSubmitProps {
 
 /**
  * Component that handles sending a message to the websocket server, and updating the message state
- * @param sendMessage: Function to send a message to the WebSocket server 
+ * @param sendMessage: Function to send a message to the WebSocket server
  * @returns Input and button to submit a message to the server
  */
-const ChatSubmit: React.FC<ChatSubmitProps> = ({ setMessageHistory, setThinking }) => {
+const ChatSubmit: React.FC<ChatSubmitProps> = ({
+  setMessageHistory,
+  setThinking,
+}) => {
   const [message, setMessage] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Submit a message callback
   const handleSubmit = useCallback(async () => {
     if (!message) return;
-    setThinking((prev) => !prev)
+    setThinking((prev) => !prev);
     setMessageHistory((prev) => [...prev, { type: 1, data: message }]);
-    console.log('hi')
-    const res = await user_query(message);
-    setMessageHistory((prev) => [...prev, { type: 0, data: res }]);
-    setThinking((prev) => !prev)
-    setMessage(""); 
+    console.log("hi");
+    try {
+      const res = await user_query(message);
+      setMessageHistory((prev) => [...prev, { type: 0, data: res }]);
+      setThinking((prev) => !prev);
+      setMessage("");
+    } catch {
+      setMessageHistory((prev) => [
+        ...prev,
+        { type: 0, data: "An error occurred while sending the message." },
+      ]);
+      setThinking((prev) => !prev);
+      setMessage("");
+      return;
+    }
   }, [message, setMessageHistory]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSubmit(); // Call handleSubmit on Enter key press
-      setMessage("")
+      setMessage("");
     }
   };
 
@@ -54,7 +67,7 @@ const ChatSubmit: React.FC<ChatSubmitProps> = ({ setMessageHistory, setThinking 
         className="rounded-full h-[56px] w-[56px]"
         disabled={message == ""}
       >
-        <LuSend size = {56} />
+        <LuSend size={56} />
       </Button>
     </div>
   );

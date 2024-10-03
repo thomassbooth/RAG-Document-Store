@@ -23,9 +23,6 @@ services:
     restart: always
     ports:
       - 3000:3000
-    environment:
-      BACKEND_URL: localhost:8000
-      LOCAL_URL: localhost:3000
 
   server:
     container_name: server

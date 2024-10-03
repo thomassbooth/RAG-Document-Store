@@ -14,8 +14,8 @@ export async function POST(request: Request) {
       { message: "Invalid Parameters" },
       { status: 400 }
     );
-    
-  const res = await fetch(`http://localhost:8000/upload`, {
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const res = await fetch(`${BACKEND_URL}/upload`, {
     method: "POST",
     body: formData,
   });
