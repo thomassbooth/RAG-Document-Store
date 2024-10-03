@@ -32,6 +32,7 @@ class DocumentFormatter:
             formatted_docs.append(
                 f"Source: {source}, Page: {page}, Paragraph: {paragraph}\nContent:\n{doc.page_content}")
 
+        print("\n\n".join(formatted_docs))
         return "\n\n".join(formatted_docs)
 
 
@@ -49,15 +50,7 @@ class QueryProcessor:
     def _create_prompt_template():
         """Creates and returns the prompt template."""
         return PromptTemplate.from_template("""
-        You are a helpful assistant. Based on the documents provided, answer the question below while citing the source, page, and paragraph for any information you reference.
-        
-        Documents:
-        {context}
-
-        Question: {question}
-
-        Response:
-        If the documents provided aren't enough to answer the question, please return "I don't have enough information to answer this question."
+        You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise. Please include the Source, Page and Paragraph from the context used. \nQuestion: {question} \nContext: {context} \nAnswer:"
         """)
 
     async def process_query(self, query: str):

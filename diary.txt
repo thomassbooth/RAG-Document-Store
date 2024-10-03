@@ -39,7 +39,7 @@
 
 5. Document Retrival system
 - Utilizing a multiquery system to generate different queries to get an array of documents, getting a better set of results.
-- 
+- Creating a 
 
 
 6. Implementing GuardRailsAI
