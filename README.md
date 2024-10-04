@@ -1,4 +1,4 @@
-# Retrieval Augmented Generation - System
+# Open Innovation Take home
 
 ## Overview
 
