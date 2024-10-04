@@ -46,9 +46,6 @@
       `OPENAI_API_KEY=YOURAPIKEY`
       `GUARDRAILS_API_KEY=YOURAPIKEY`
 
-   2. Inside of cleint, create a .env file and create values:
-      `NEXT_PUBLIC_BACKEND_URL=http://localhost:8000`
-      `NEXT_PUBLIC_LOCAL_URL=http://localhost:3000`
 
 2. **Build the application**
 

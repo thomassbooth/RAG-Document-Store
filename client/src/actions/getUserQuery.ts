@@ -5,8 +5,7 @@
  */
 
 export const user_query = async (query: string) => {
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const res = await fetch(`${BACKEND_URL}/query`, {
+  const res = await fetch(`http://localhost:8000/query`, {
     // replace with your FastAPI URL
     method: "POST",
     body: JSON.stringify({ query: query }),

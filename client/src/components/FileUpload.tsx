@@ -24,7 +24,7 @@ const FileUpload = () => {
     try {
       
       const res = await upload_file(formData)
-
+      
       if (res.ok) {
         setStatus("File uploaded successfully!");
       } else {

@@ -4,8 +4,8 @@
  * @returns an error or if its ok
  */
 export const upload_file = async (formData: FormData) => {
-  const LOCAL_URL = process.env.NEXT_PUBLIC_LOCAL_URL;
-  const res = await fetch(`${LOCAL_URL}/api/upload`, {
+  console.log("upload_file");
+  const res = await fetch(`http://localhost:8000/upload`, {
     // replace with your FastAPI URL
     method: "POST",
     body: formData,

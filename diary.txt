@@ -64,5 +64,5 @@ Issues:
 
 Issues:
     - Some small issues using env values and a docker container
-    Solution: Creating an env file yourself before building the project
+    Solution: Hard coding localhost to call backend server
 
