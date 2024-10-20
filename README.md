@@ -1,4 +1,4 @@
-# Open Innovation Take home
+# Document Store - Queries and Uploading
 
 ## Overview
 
